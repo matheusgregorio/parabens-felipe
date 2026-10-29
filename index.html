@@ -241,6 +241,20 @@ button:active{transform:translateY(1px)}
 }
 </style>
 
+<script>
+  // Abra o site uma vez com ?naocontar para suas próprias visitas não entrarem no Analytics (vale por navegador)
+  (function(){
+    var off = false;
+    try {
+      var q = new URLSearchParams(location.search);
+      if (q.has('naocontar')) { localStorage.setItem('naocontar', '1'); history.replaceState(null, '', location.pathname + location.hash); window.__naoContarAviso = true; }
+      if (q.has('contar')) { localStorage.removeItem('naocontar'); history.replaceState(null, '', location.pathname + location.hash); }
+      off = localStorage.getItem('naocontar') === '1';
+    } catch (e) {}
+    window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };
+    if (off) window.va('beforeSend', function(){ return null; });
+  })();
+</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -759,5 +773,13 @@ addEventListener('hashchange', route);
 route();
 </script>
 
+<script>
+if (window.__naoContarAviso){
+  var t=document.createElement('div');
+  t.textContent='Pronto: suas visitas neste navegador não contam mais no Analytics.';
+  t.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;background:#1c3553;color:#fff;font:700 14px Nunito,system-ui,sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:calc(100% - 32px);text-align:center';
+  document.body.appendChild(t); setTimeout(function(){t.remove()},4000);
+}
+</script>
 </body>
 </html>
