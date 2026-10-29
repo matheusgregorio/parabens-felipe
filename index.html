@@ -638,18 +638,18 @@ function tick(now){
   const dt = Math.min(2.5, (now - last) / 16.67); last = now;
   const s = G;
   s.t += dt;
-  s.speed = 2 + s.score * 0.045;
-  s.x += (s.tx - s.x) * Math.min(1, 0.35 * dt);
+  s.speed = 2.6 + s.score * 0.13;
+  s.x += (s.tx - s.x) * Math.min(1, 0.22 * dt);
   s.x = Math.max(s.r, Math.min(W - s.r, s.x));
   if (s.t >= s.next){
-    const bad = Math.random() < Math.min(0.35, 0.2 + s.score * 0.004);
+    const bad = Math.random() < Math.min(0.6, 0.3 + s.score * 0.012);
     s.items.push({ x: 20 + Math.random()*(W-40), y: -30, e: bad ? BAD[Math.floor(Math.random()*BAD.length)] : GOOD[Math.floor(Math.random()*GOOD.length)], bad, v: s.speed * (0.8 + Math.random()*0.5), rot: (Math.random()-.5)*0.6 });
-    s.next = s.t + Math.max(14, 48 - s.score * 0.7);
+    s.next = s.t + Math.max(12, 40 - s.score * 1.1);
   }
   const py = H - s.r - 18;
   s.items.forEach(it => {
     it.y += it.v * dt;
-    if (!it.done && Math.hypot(it.x - s.x, it.y - py) < s.r + 22){
+    if (!it.done && Math.hypot(it.x - s.x, it.y - py) < s.r + 14){
       it.done = true;
       if (it.bad){ s.lives--; s.hurt = 18; s.floats.push({x:it.x, y:py - s.r, txt:`${it.e} não tá no parabéns!`, a:1, bad:true}); }
       else { s.score++; s.floats.push({x:s.x, y:py - s.r, txt:`+1 parabéns pro Felipe`, a:1}); if (s.score % 10 === 0) burst(); }
